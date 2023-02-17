@@ -1,6 +1,4 @@
-const username=document.getElementById('username');
 const email=document.getElementById('email');
-const number=document.getElementById('number');
 const password=document.getElementById('password');
 const msg=document.getElementById('msg');
 const form=document.getElementById('form');
@@ -8,32 +6,30 @@ const btn=document.getElementById('btn');
 
 
 
-btn.addEventListener('click',signup)
+btn.addEventListener('click',login)
 
-async function signup(e){
+async function login(e){
  try{
  e.preventDefault();
-    if(username.value===''|| email.value==='' ||number.value===''||password.value=='')
+    if(email.value==='' ||password.value=='')
     {
-        
-        msg.innerHTML="Please Fill All Details";
+        msg.innerHTML="Please Enter All Details";
         setTimeout(()=>{
             msg.innerHTML="";
         },3000)
     }
     else{
         const userdetails={
-            username:username.value,
             email:email.value,
-            number:number.value,
             password:password.value
         }
-        const response =await axios.post('http://localhost:3000/user/signup',userdetails)
+        const response=await axios.post('http://localhost:3000/user/login',userdetails)
         form.reset();
+        alert(response.data.message);
     }
 }
 catch(err){
-  msg.innerHTML=msg.innerHTML+`<div>${err.message}</div>`;
+  msg.innerHTML=msg.innerHTML+`<div>${err.messaage}</div>`;
   setTimeout(()=>{
     msg.innerHTML="";
 },3000)
