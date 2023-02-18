@@ -33,7 +33,8 @@ async function signup(e){
     }
 }
 catch(err){
-  msg.innerHTML=msg.innerHTML+`<div>${err.message}</div>`;
+    console.log(err);
+  msg.innerHTML=msg.innerHTML+`<div>${err.response.data.message}</div>`;
   setTimeout(()=>{
     msg.innerHTML="";
 },3000)

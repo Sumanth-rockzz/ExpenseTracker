@@ -25,11 +25,13 @@ async function login(e){
         }
         const response=await axios.post('http://localhost:3000/user/login',userdetails)
         form.reset();
-        alert(response.data.message);
+        console.log(response);
+        window.location='C:/sumanth/front/expensetrackerfrontend/addExpense.html';
     }
 }
 catch(err){
-  msg.innerHTML=msg.innerHTML+`<div>${err.messaage}</div>`;
+    console.log(err);
+  msg.innerHTML=msg.innerHTML+`<div>${err.response.data.message}</div>`;
   setTimeout(()=>{
     msg.innerHTML="";
 },3000)
