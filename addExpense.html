@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortuct icon" type="image/x-icon" href="expensesIcon.png">
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="addExpense.css">
+    <title>Add Expense</title>
+</head>
+<body>
+    <div class="main-container">
+    <div class="container">
+        <form id="myform" class="form"">
+            <h1>Expense Tracker</h1>
+            <div id="msg">
+            </div>
+            <hr>
+        <label class="form-label">Expense Amount</label>
+        <input type="number" id="amount" class="form-control" placeholder="Enter your Expense" required>
+        <label class="form-label" >Date and time</label>
+        <input type="datetime-local" class="form-control" id="date"required>
+        <label class="form-label">Expenditure Reason</label>
+        <input type="text" class="form-control" id="reason" placeholder="Mention Reason"required>
+        <label class="form-label" >Select Category</label>
+        <select  id="category" class="form-select" required>
+            <option>Movie</option>
+            <option>Food</option>
+            <option>Shopping</option>
+            <option>Bills</option>
+            <option>Rent</option>
+            <option>Others</option>
+        </select><br><br>
+            <button id="add" class="btn">Add Expenditure</button> 
+    </form>
+    </div>
+    <div class="total">
+        <label><h2>Total Expenses Till Date</h2></label>
+        <h1 id="totalexpense">0</h1>
+        <h2>₹</h2>
+    <h1>Track of Your Expenses...</h1>
+    <table class="table">
+        <thead class="table-dark">
+        <tr>
+            <th>Date and Time</th>
+            <th>Amount</th>
+            <th>Reason</th>
+            <th>Category</th>
+            <th>Delete</th>
+            <th>Edit</th>
+        </tr>
+    </thead>
+    <tbody id="expenseslist">
+    </tbody>
+    </table>
+    </div>
+    </div>
+
+    <script src="addexpense.js"></script>
+</body>
+</html>
