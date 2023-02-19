@@ -121,6 +121,48 @@ window.addEventListener('DOMContentLoaded',async ()=>{
         } 
     }
 
-   
+   const premium=document.querySelector('#premium');
+
+   premium.addEventListener('click',premiumuser);
+
+   async function premiumuser(e){
+    try{
+        const token=localStorage.getItem('token');
+        console.log(token);
+        const response =await axios.get(`http://localhost:3000/purchase/premiummembership`,{headers:{'Authorization':token}});
+        console.log(response);
+        var options={
+            "key":response.data.key_id,
+            "order_id":response.data.order.id,
+            "handler":async function(response){
+                await axios.post('http://localhost:3000/purchase/updatetransactionstatus',{
+                order_id:options.order_id,
+                payment_id:response.razor_payment_id},
+                {headers:{"Authorization":token}})
+
+                alert('You Are a Premium User Now')
+
+            /* document.getElementById('premium').style.visibility="hidden"; */
+               
+
+            },
+
+        }
+        const rp1=new Razorpay(options);
+        rp1.open();
+        e.preventDefault();
+
+        rp1.on('payment.failed',function(response){
+            console.log(response);
+            alert('Something went wrong')
+        })
+
+    }
+    catch(err){
+        console.log(err);
+        console.log("error at premiumbtn",err);
+    }
+
+   }
     
     

@@ -10,6 +10,7 @@
     <title>Add Expense</title>
 </head>
 <body>
+    
     <div class="main-container">
     <div class="container">
         <form id="myform" class="form"">
@@ -17,7 +18,6 @@
             <div id="msg">
             </div>
             <hr>
-        
         <label class="form-label">Expense Amount</label>
         <div class="group">
         <button>₹</button>
@@ -40,9 +40,12 @@
     </form>
     </div>
     <div class="total">
+        <button id="premium" class="btn">Buy Premium</button>
+        <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
         <label><h2>Total Expenses Till Date</h2></label>
         <h1 id="totalexpense">0</h1>
         <h1>₹</h1>
+        
     <h1>Track of Your Expenses...</h1>
     <table class="table">
         <thead class="table-dark">
