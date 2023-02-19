@@ -8,6 +8,22 @@ const msg=document.querySelector('#msg');
 let total=0;
 const totalexpense=document.getElementById('totalexpense');
 add.addEventListener('click',addexpense);
+
+//animate count
+let count=0;
+let value=0;
+function increaseCount(){
+    if(count<=total){
+        totalexpense.innerHTML=count;
+        count=count+value;
+        value=value+3;
+        setTimeout(increaseCount,1);
+    }else{
+        totalexpense.innerHTML=total;
+    }
+}
+
+
 async function addexpense(e){
 
  try{
@@ -18,13 +34,14 @@ async function addexpense(e){
         setTimeout(()=>msg.innerHTML='',3000)
     }
     else  {
-    const myobj={
+    const expensedetails={
        amount:amount.value,
        date:date.value,
        reason:reason.value,
        category:category.value
     };
-    const response =await axios.post('http://localhost:3000/expense/add-expense',myobj)
+    const token=localStorage.getItem('token');
+    const response =await axios.post('http://localhost:3000/expense/add-expense',expensedetails,{headers:{"Authorization":token}});
     total+=parseInt(amount.value);
     totalexpense.innerHTML=total;
     console.log(response.data.message);
@@ -51,7 +68,8 @@ function create(data){
 window.addEventListener('DOMContentLoaded',async ()=>{
 
     try{
-    const response =await axios.get(`http://localhost:3000/expense/get-expenses`);
+        const token=localStorage.getItem('token');
+    const response =await axios.get(`http://localhost:3000/expense/get-expenses`,{headers:{"Authorization":token}});
     console.log(response);
   
         total=0;
@@ -61,7 +79,9 @@ window.addEventListener('DOMContentLoaded',async ()=>{
             total+=parseInt(response.data.message[i].amount);
             create(response.data.message[i]);
         }
-        totalexpense.innerHTML=total;
+        
+            increaseCount();
+        
     }
     catch(err){
         console.log("Error at Delete Function:",err);
@@ -70,8 +90,9 @@ window.addEventListener('DOMContentLoaded',async ()=>{
 
     async function del(id,amount){
     try{
+        const token=localStorage.getItem('token');
        const tr=document.getElementById(`${id}`);
-       const response= await axios.delete(`http://localhost:3000/expense/delete-expense/${id}`);
+       const response= await axios.delete(`http://localhost:3000/expense/delete-expense/${id}`,{headers:{"Authorization":token}});
         total-=parseInt(amount);
         totalexpense.innerHTML=total;
         Expenselist.removeChild(tr);
@@ -99,3 +120,7 @@ window.addEventListener('DOMContentLoaded',async ()=>{
             console.log("Error at Edit Function:",err);
         } 
     }
+
+   
+    
+    

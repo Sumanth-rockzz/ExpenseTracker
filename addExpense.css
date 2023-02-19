@@ -11,6 +11,13 @@
         justify-content: center;
         padding: 20px;
   }
+  .group{
+    display: flex;
+  }
+  .group button{
+    background-color:#038555;
+    color:white;
+  }
 
   .form {
     display: flex;

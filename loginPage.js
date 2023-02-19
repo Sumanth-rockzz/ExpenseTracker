@@ -25,8 +25,8 @@ async function login(e){
         }
         const response=await axios.post('http://localhost:3000/user/login',userdetails)
         form.reset();
-        console.log(response);
-        window.location='C:/sumanth/front/expensetrackerfrontend/addExpense.html';
+        localStorage.setItem('token',response.data.token);
+         window.location='C:/sumanth/front/expensetrackerfrontend/addExpense.html';
     }
 }
 catch(err){
