@@ -205,7 +205,7 @@ window.addEventListener('DOMContentLoaded',async ()=>{
     let i=1;
     sortedarray.data.leaderboarddetails.forEach((data)=>{
         console.log(data);
-        leaderboardtablebody.innerHTML=leaderboardtablebody.innerHTML+`<tr><td>${i}</td><td>${data.username}</td><td>${data.total_expense}</td></tr>`;
+        leaderboardtablebody.innerHTML=leaderboardtablebody.innerHTML+`<tr><td>${i}</td><td>${data.username}</td><td>${data.totalexpenses}</td></tr>`;
         i++;
     })
     document.getElementById('leaderboarddetails').style.display="block";
