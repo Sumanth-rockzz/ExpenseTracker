@@ -190,14 +190,13 @@ window.addEventListener('DOMContentLoaded',async ()=>{
    function showpremiumuser(){
     document.getElementById('premiumbtn').style.display="none";
     document.getElementById('premiummsg').innerHTML="You are a Premium User";
-    document.getElementById('leaderboardbtn').style.display="block"
+    document.getElementById('leaderboardbtn').style.display="block";
   
     
    }
 
    async function showleaderboard(){
     try{
-    document.getElementById('leaderboarddetails').style.display="block";
     const leaderboardtablebody=document.getElementById('leaderboardtablebody');
     const token=localStorage.getItem('token');
     const sortedarray= await axios.get(`http://localhost:3000/premium/leaderboard`,{headers:{'Authorization':token}});
@@ -206,9 +205,10 @@ window.addEventListener('DOMContentLoaded',async ()=>{
     let i=1;
     sortedarray.data.leaderboarddetails.forEach((data)=>{
         console.log(data);
-        leaderboardtablebody.innerHTML=leaderboardtablebody.innerHTML+`<tr><td>${i}</td><td>${data.name}</td><td>${data.total_expense}</td></tr>`;
+        leaderboardtablebody.innerHTML=leaderboardtablebody.innerHTML+`<tr><td>${i}</td><td>${data.username}</td><td>${data.total_expense}</td></tr>`;
         i++;
     })
+    document.getElementById('leaderboarddetails').style.display="block";
    
     }
     catch(err){
