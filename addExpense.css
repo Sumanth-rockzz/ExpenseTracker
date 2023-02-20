@@ -56,12 +56,12 @@
 div{
     box-sizing: border-box;
 }
-th{
-    background-color:rgb(32, 25, 25); 
-    color: white;
+.table-dark{
+  background-color: #6e1505ee;
+   color:#fff;
 }
 tr:nth-child(even){
-    background-color:#f2f2f2; 
+    background-color:#f2f2f2;
 }
 #msg{
   color:red;
@@ -71,6 +71,34 @@ tr:nth-child(even){
     align-items: center;
     justify-content: center;
 }
+#premiummsg{
+  color:#850303;
+  font-style: italic;
+}
+#leaderboarddetails{
+  display:none;
+}
+#leaderboardbtn{
+  display:none;
+}
+
+tr{
+  text-align: center;
+}
+
+
+.table-leader{
+  border:none;
+  border:0.5px solid black;
+  border-radius:4px;
+  padding: 1rem;
+
+}
+.table-leader td{
+  padding:0.5rem;
+}
+  
+
 @media only screen and (max-width:600px){
 
     .main-container{

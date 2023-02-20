@@ -8,6 +8,11 @@ const msg=document.querySelector('#msg');
 let total=0;
 const totalexpense=document.getElementById('totalexpense');
 add.addEventListener('click',addexpense);
+const premiumbtn=document.querySelector('#premiumbtn');
+premiumbtn.addEventListener('click',premiumuser);
+
+const leaderboardbtn=document.querySelector('#leaderboardbtn');
+leaderboardbtn.addEventListener('click',showleaderboard);
 
 //animate count
 let count=0;
@@ -22,7 +27,16 @@ function increaseCount(){
         totalexpense.innerHTML=total;
     }
 }
+//decode token
+function parseJwt (token) {
+    var base64Url = token.split('.')[1];
+    var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
 
+    return JSON.parse(jsonPayload);
+}
 
 async function addexpense(e){
 
@@ -69,6 +83,13 @@ window.addEventListener('DOMContentLoaded',async ()=>{
 
     try{
         const token=localStorage.getItem('token');
+        const decodedtoken=parseJwt(token);
+        console.log(">>>>>>>>>>>>",decodedtoken);
+        const ispremiumuser=decodedtoken.ispremiumuser;
+        if(ispremiumuser){
+            showpremiumuser();
+        }
+
     const response =await axios.get(`http://localhost:3000/expense/get-expenses`,{headers:{"Authorization":token}});
     console.log(response);
   
@@ -121,9 +142,8 @@ window.addEventListener('DOMContentLoaded',async ()=>{
         } 
     }
 
-   const premium=document.querySelector('#premium');
+   
 
-   premium.addEventListener('click',premiumuser);
 
    async function premiumuser(e){
     try{
@@ -135,14 +155,16 @@ window.addEventListener('DOMContentLoaded',async ()=>{
             "key":response.data.key_id,
             "order_id":response.data.order.id,
             "handler":async function(response){
-                await axios.post('http://localhost:3000/purchase/updatetransactionstatus',{
+               const result= await axios.post('http://localhost:3000/purchase/updatetransactionstatus',{
                 order_id:options.order_id,
                 payment_id:response.razor_payment_id},
                 {headers:{"Authorization":token}})
 
                 alert('You Are a Premium User Now')
 
-            /* document.getElementById('premium').style.visibility="hidden"; */
+                showpremiumuser();
+                console.log(">>>>>>>",result.data.token);
+                localStorage.setItem('token',result.data.token);
                
 
             },
@@ -163,6 +185,36 @@ window.addEventListener('DOMContentLoaded',async ()=>{
         console.log("error at premiumbtn",err);
     }
 
+   }
+
+   function showpremiumuser(){
+    document.getElementById('premiumbtn').style.display="none";
+    document.getElementById('premiummsg').innerHTML="You are a Premium User";
+    document.getElementById('leaderboardbtn').style.display="block"
+  
+    
+   }
+
+   async function showleaderboard(){
+    try{
+    document.getElementById('leaderboarddetails').style.display="block";
+    const leaderboardtablebody=document.getElementById('leaderboardtablebody');
+    const token=localStorage.getItem('token');
+    const sortedarray= await axios.get(`http://localhost:3000/premium/leaderboard`,{headers:{'Authorization':token}});
+
+    console.log(">>>>",sortedarray.data.leaderboarddetails);
+    let i=1;
+    sortedarray.data.leaderboarddetails.forEach((data)=>{
+        console.log(data);
+        leaderboardtablebody.innerHTML=leaderboardtablebody.innerHTML+`<tr><td>${i}</td><td>${data.name}</td><td>${data.total_expense}</td></tr>`;
+        i++;
+    })
+   
+    }
+    catch(err){
+        console.log(err);
+    }
+    
    }
     
     

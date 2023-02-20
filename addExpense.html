@@ -40,7 +40,9 @@
     </form>
     </div>
     <div class="total">
-        <button id="premium" class="btn">Buy Premium</button>
+        <button id="premiumbtn" class="btn">Buy Premium</button>
+        <h2 id="premiummsg"></h2>
+        <button id="leaderboardbtn" class="btn">Check Leader Board</button>
         <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
         <label><h2>Total Expenses Till Date</h2></label>
         <h1 id="totalexpense">0</h1>
@@ -62,8 +64,21 @@
     </tbody>
     </table>
     </div>
+    <div id="leaderboarddetails">
+     <h4>Top Expenses LeaderBoard Details</h4>
+    <table class="table-leader">
+        <thead>
+        <tr>
+            <th>Rank</th>
+            <th>Name</th>
+            <th>Total Expenses</th>
+        </tr>
+    </thead>
+    <tbody id="leaderboardtablebody">
+    </tbody>
+    </table>
     </div>
-
+    </div>
     <script src="addexpense.js"></script>
 </body>
 </html>
