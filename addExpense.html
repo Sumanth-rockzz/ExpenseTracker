@@ -12,72 +12,83 @@
 <body>
     
     <div class="main-container">
-    <div class="container">
-        <form id="myform" class="form"">
-            <h1>Expense Tracker</h1>
-            <div id="msg">
+        <div class="container-1">
+            <form id="myform" class="form">
+                <h1>Expense Tracker</h1>
+                <div id="msg">
+                </div>
+                <hr>
+            <label class="form-label">Expense Amount</label>
+            <div class="group">
+            <button>₹</button>
+            <input type="number" id="amount" class="form-control" placeholder="Enter your Expense" required>
             </div>
-            <hr>
-        <label class="form-label">Expense Amount</label>
-        <div class="group">
-        <button>₹</button>
-        <input type="number" id="amount" class="form-control" placeholder="Enter your Expense" required>
+            <label class="form-label" >Date and time</label>
+            <input type="datetime-local" class="form-control" id="date"required>
+            <label class="form-label">Expenditure Reason</label>
+            <input type="text" class="form-control" id="reason" placeholder="Mention Reason"required>
+            <label class="form-label" >Select Category</label>
+            <select  id="category" class="form-select" required>
+                <option>Movie</option>
+                <option>Food</option>
+                <option>Shopping</option>
+                <option>Bills</option>
+                <option>Rent</option>
+                <option>Others</option>
+            </select><br><br>
+                <button id="add" class="btn">Add Expenditure</button> 
+        </form>
+        <div class="total">
+            <button id="premiumbtn" class="btn">Buy Premium</button>
+            <h2 id="premiummsg"></h2>
+            <button id="leaderboardbtn" class="btn">Check Leader Board</button>
+            <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+            <label><h2>Total Expenses Till Date</h2></label>
+            <h1 id="totalexpense">0</h1>
+            <h1>₹</h1>
+            <button id="downloadbtn" class="btn">Download Expenses</button>
+            <button id="downloadedfilesbtn" class="btn">View Downloaded Expenses</button>
+            
         </div>
-        <label class="form-label" >Date and time</label>
-        <input type="datetime-local" class="form-control" id="date"required>
-        <label class="form-label">Expenditure Reason</label>
-        <input type="text" class="form-control" id="reason" placeholder="Mention Reason"required>
-        <label class="form-label" >Select Category</label>
-        <select  id="category" class="form-select" required>
-            <option>Movie</option>
-            <option>Food</option>
-            <option>Shopping</option>
-            <option>Bills</option>
-            <option>Rent</option>
-            <option>Others</option>
-        </select><br><br>
-            <button id="add" class="btn">Add Expenditure</button> 
-    </form>
-    </div>
-    <div class="total">
-        <button id="premiumbtn" class="btn">Buy Premium</button>
-        <h2 id="premiummsg"></h2>
-        <button id="leaderboardbtn" class="btn">Check Leader Board</button>
-        <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-        <label><h2>Total Expenses Till Date</h2></label>
-        <h1 id="totalexpense">0</h1>
-        <h1>₹</h1>
-        
-    <h1>Track of Your Expenses...</h1>
-    <table class="table">
-        <thead class="table-dark">
-        <tr>
-            <th>Date and Time</th>
-            <th>Amount</th>
-            <th>Reason</th>
-            <th>Category</th>
-            <th>Delete</th>
-            <th>Edit</th>
-        </tr>
-    </thead>
-    <tbody id="expenseslist">
-    </tbody>
-    </table>
-    </div>
-    <div id="leaderboarddetails">
-     <h4>Top Expenses LeaderBoard Details</h4>
-    <table class="table-leader">
-        <thead>
-        <tr>
-            <th>Rank</th>
-            <th>Name</th>
-            <th>Total Expenses</th>
-        </tr>
-    </thead>
-    <tbody id="leaderboardtablebody">
-    </tbody>
-    </table>
-    </div>
+        <div class="track-table">
+            <h1>Track of Your Expenses...</h1>
+        <table class="table">
+            <thead class="table-dark">
+            <tr>
+                <th>Date and Time</th>
+                <th>Amount</th>
+                <th>Reason</th>
+                <th>Category</th>
+                <th>Delete</th>
+                <th>Edit</th>
+            </tr>
+        </thead>
+        <tbody id="expenseslist">
+        </tbody>
+        </table>
+        </div>
+        </div>
+        <div class="container-2">
+            <div id="leaderboarddetails">
+                <h4>Top Expenses LeaderBoard Details</h4>
+                <table class="table-leader">
+                    <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Name</th>
+                        <th>Total Expenses</th>
+                    </tr>
+                </thead>
+                <tbody id="leaderboardtablebody">
+                </tbody>
+                </table>
+                </div>
+            <div id="downloadedfilesdiv">
+                <ol id="downloadedfileslist">
+                </ol>
+            </div>
+        </div>
+       
     </div>
     <script src="addexpense.js"></script>
 </body>

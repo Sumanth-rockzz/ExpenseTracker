@@ -14,6 +14,16 @@ premiumbtn.addEventListener('click',premiumuser);
 const leaderboardbtn=document.querySelector('#leaderboardbtn');
 leaderboardbtn.addEventListener('click',showleaderboard);
 
+const downloadbtn=document.getElementById('downloadbtn');
+
+downloadbtn.addEventListener('click',downloadexpenses);
+
+
+const downloadedfilesbtn=document.getElementById('downloadedfilesbtn');
+downloadedfilesbtn.addEventListener('click',downloadedfiles);
+
+
+
 //animate count
 let count=0;
 let value=0;
@@ -191,6 +201,9 @@ window.addEventListener('DOMContentLoaded',async ()=>{
     document.getElementById('premiumbtn').style.display="none";
     document.getElementById('premiummsg').innerHTML="You are a Premium User";
     document.getElementById('leaderboardbtn').style.display="block";
+    downloadbtn.style.display="block";
+    downloadedfilesbtn.style.display="block";
+    document.getElementById('downloadedfilesdiv').style.display="block";
   
     
    }
@@ -217,4 +230,45 @@ window.addEventListener('DOMContentLoaded',async ()=>{
     
    }
     
+   async function downloadexpenses(e){
+    e.preventDefault();
+    try{
+        const token=localStorage.getItem('token');
+        const response  =  await axios.get(`http://localhost:3000/expense/download`,{headers:{'Authorization':token}});
+        
+        console.log(response);
+        if(response.status===200){
+            const a=document.createElement('a');
+            a.href=response.data.fileURL;
+            a.download='myexpense.csv';
+            a.click(); 
+        }
+        else{
+             console.log(">>>>>")
+            throw new Error(response.data.message);
+        }   
+    }catch(err){
+        console.log(err);
+    }
+   }
+
+   async function downloadedfiles(e){
+    
+            try{
+                e.preventDefault();
+               const token= localStorage.getItem('token');
+            const response= await axios.get(`http://localhost:3000/expense/downloadedfiles`,{headers:{'Authorization':token}});
+
+            const downloadedfileslist=document.getElementById('downloadedfileslist');
+            for(let i=0;i<response.data.message.length;i++){
+
+                //console.log(response.data.message[0].url);
+                downloadedfileslist.innerHTML+=`<li><a href=${response.data.message[i].url}>TextFile${i}</a></li>`
+            }
+                
+
+            }catch(err){
+                console.log(err);
+            }
+   }
     
