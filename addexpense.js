@@ -5,8 +5,10 @@ const date=document.querySelector('#date');
 const reason=document.querySelector('#reason');
 const category=document.querySelector('#category');
 const msg=document.querySelector('#msg');
-let total=0;
+
 const totalexpense=document.getElementById('totalexpense');
+let total=0;
+
 add.addEventListener('click',addexpense);
 const premiumbtn=document.querySelector('#premiumbtn');
 premiumbtn.addEventListener('click',premiumuser);
@@ -21,6 +23,15 @@ downloadbtn.addEventListener('click',downloadexpenses);
 
 const downloadedfilesbtn=document.getElementById('downloadedfilesbtn');
 downloadedfilesbtn.addEventListener('click',downloadedfiles);
+
+const limitselect=document.getElementById('limit');
+
+limitselect.addEventListener('change',()=>{
+    const limit=parseInt(limitselect.value);
+    localStorage.setItem('limit',limit);
+})
+
+
 
 
 
@@ -66,7 +77,8 @@ async function addexpense(e){
     };
     const token=localStorage.getItem('token');
     const response =await axios.post('http://localhost:3000/expense/add-expense',expensedetails,{headers:{"Authorization":token}});
-    total+=parseInt(amount.value);
+
+    total=response.data.totalExpense;
     totalexpense.innerHTML=total;
     console.log(response.data.message);
          create(response.data.message);
@@ -80,8 +92,8 @@ function create(data){
     try{
     Expenselist.innerHTML=Expenselist.innerHTML+`<tr id="${data.id}"><td>${data.date}</td><td>${data.amount}</td>
     <td>${data.reason}</td><td>${data.category}</td>
-    <td><button class="btn btn-danger" onclick="del('${data.id}','${data.amount}')">Delete</button></td>
-    <td><button class="btn btn-primary" onclick="edit('${data.id}','${data.amount}','${data.date}','${data.reason}','${data.category}')">Edit</button></td></tr>`;
+    <td><button class="btn" onclick="del('${data.id}')">Delete</button></td>
+    <td><button class="btn" onclick="edit('${data.id}','${data.amount}','${data.date}','${data.reason}','${data.category}')">Edit</button></td></tr>`;
     document.getElementById('myform').reset();
     }
     catch(err){
@@ -92,6 +104,8 @@ function create(data){
 window.addEventListener('DOMContentLoaded',async ()=>{
 
     try{
+        const limit=localStorage.getItem('limit');
+        const page=1;
         const token=localStorage.getItem('token');
         const decodedtoken=parseJwt(token);
         console.log(">>>>>>>>>>>>",decodedtoken);
@@ -100,18 +114,19 @@ window.addEventListener('DOMContentLoaded',async ()=>{
             showpremiumuser();
         }
 
-    const response =await axios.get(`http://localhost:3000/expense/get-expenses`,{headers:{"Authorization":token}});
+    const response =await axios.get(`http://localhost:3000/expense/get-expenses?page=${page}&limit=${limit}`,{headers:{"Authorization":token}});
     console.log(response);
-  
-        total=0;
-
+    
+        total=response.data.totalExpense;
         for(let i=0;i<response.data.message.length;i++)
         {
-            total+=parseInt(response.data.message[i].amount);
+           
             create(response.data.message[i]);
         }
-        
+        console.log(">>>>>>>>>>",total)
             increaseCount();
+
+            showpages(response.data);
         
     }
     catch(err){
@@ -119,12 +134,12 @@ window.addEventListener('DOMContentLoaded',async ()=>{
     } 
 })
 
-    async function del(id,amount){
+    async function del(id){
     try{
         const token=localStorage.getItem('token');
        const tr=document.getElementById(`${id}`);
        const response= await axios.delete(`http://localhost:3000/expense/delete-expense/${id}`,{headers:{"Authorization":token}});
-        total-=parseInt(amount);
+        total=response.data.totalExpense;
         totalexpense.innerHTML=total;
         Expenselist.removeChild(tr);
     }
@@ -141,9 +156,9 @@ window.addEventListener('DOMContentLoaded',async ()=>{
         document.getElementById('date').value=date;
         document.getElementById('reason').value=reason;
         document.getElementById('category').value=category;
-
-        const response = await axios.delete(`http://localhost:3000/expense/edit-expense/${id}`)
-        total-=parseInt(amount);
+        const token=localStorage.getItem('token');
+        const response = await axios.delete(`http://localhost:3000/expense/delete-expense/${id}`,{headers:{"Authorization":token}});
+        total=response.data.totalExpense;
         totalexpense.innerHTML=total;
         Expenselist.removeChild(tr);
         }
@@ -210,14 +225,17 @@ window.addEventListener('DOMContentLoaded',async ()=>{
 
    async function showleaderboard(){
     try{
+        
     const leaderboardtablebody=document.getElementById('leaderboardtablebody');
     const token=localStorage.getItem('token');
     const sortedarray= await axios.get(`http://localhost:3000/premium/leaderboard`,{headers:{'Authorization':token}});
 
     console.log(">>>>",sortedarray.data.leaderboarddetails);
     let i=1;
+    leaderboardtablebody.innerHTML="";
     sortedarray.data.leaderboarddetails.forEach((data)=>{
         console.log(data);
+        
         leaderboardtablebody.innerHTML=leaderboardtablebody.innerHTML+`<tr><td>${i}</td><td>${data.username}</td><td>${data.totalexpenses}</td></tr>`;
         i++;
     })
@@ -253,7 +271,7 @@ window.addEventListener('DOMContentLoaded',async ()=>{
    }
 
    async function downloadedfiles(e){
-    
+
             try{
                 e.preventDefault();
                const token= localStorage.getItem('token');
@@ -272,3 +290,51 @@ window.addEventListener('DOMContentLoaded',async ()=>{
             }
    }
     
+            const pages= document.getElementById('pages')
+   async function showpages({currentpage,nextpage,previouspage,hasnextpage,haspreviouspage,lastpage}){
+        try{
+                pages.innerHTML='';
+
+                    if(haspreviouspage){
+                        const btn2=document.createElement('button');
+                        btn2.innerHTML=previouspage;
+                        btn2.addEventListener('click',()=>getExpenses(previouspage))
+                        pages.appendChild(btn2);
+                    }
+                    const btn1=document.createElement('button');
+                    btn1.innerHTML=`<h3>${currentpage}</h3>`
+                    btn1.addEventListener('click',()=>getExpenses(currentpage))
+                    pages.appendChild(btn1);
+
+                    if(hasnextpage){
+                        const btn3=document.createElement('button')
+                        btn3.innerHTML=nextpage;
+                        btn3.addEventListener('click',()=>getExpenses(nextpage))
+                        pages.appendChild(btn3);
+                    }
+
+        }catch(err){
+                console.log(err);
+        }
+   }
+
+   async function getExpenses(page){
+    try{
+        const limit=localStorage.getItem('limit');
+        const token= localStorage.getItem('token');
+        const response =await axios.get(`http://localhost:3000/expense/get-expenses?page=${page}&limit=${limit}`,{headers:{"Authorization":token}});
+    
+            console.log("$$$$$$$$$$$",response)
+
+            Expenselist.innerHTML="";
+        for(let i=0;i<response.data.message.length;i++)
+        {
+            create(response.data.message[i]);
+        }
+        showpages(response.data);
+        
+
+    }catch(err){
+        console.log(err);
+    }
+   }
